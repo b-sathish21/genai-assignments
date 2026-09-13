@@ -1,0 +1,57 @@
+Scenario 1 — Search Functionality
+
+❌ Weak: "Test the search feature."
+
+What's missing: No product type (e-commerce, hospital), 
+no filter/sort behavior, no empty/invalid input scenarios, no performance angle.
+
+Scenario 2 — File Upload
+
+❌ Weak: "Generate test cases for file upload."
+
+What's missing: No file types, no size limits, 
+no success/failure criteria, no security angle (malicious file upload).
+
+Scenario 3— Shopping Cart
+
+❌ Weak: "Test the cart functionality."
+
+What's missing: No add/remove/update actions, 
+no price calculation validation, no coupon/discount scenarios, no out-of-stock handling.
+
+Scenario 4 — Role-Based Access Control
+
+❌ Weak: "Write test cases for user roles."
+
+What's missing: No role types (Admin, Manager, Viewer), 
+no permission matrix, no unauthorized access scenarios, no app domain.
+
+Scenario 5 — API Testing
+
+❌ Weak: "Write API test cases for user registration."
+
+What's missing: No HTTP method, no request/response structure, 
+no status codes to validate, no tool context (Postman/RestAssured).
+
+Scenario 6 — Mobile App (OTP Login)
+
+❌ Weak: "Test OTP login on mobile."
+
+What's missing: No platform (Android/iOS), no OTP expiry time, 
+no resend behavior, no network failure scenario, no Appium/device context.
+
+Scenario 7 — Dashboard / Report Generation
+
+❌ Weak: "Test the reports section."
+
+What's missing: No report type (PDF/Excel/CSV), no date range filters, 
+no data accuracy validation, no permission-based visibility.
+
+Scenario: [chosen scenario]
+
+I - Instruction    : 
+C - Context        : 
+E - Example        : 
+P - Persona        : 
+O - Output Format  : 
+T - Tone           : 

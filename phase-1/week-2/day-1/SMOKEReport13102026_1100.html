@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Smoke Suite Report</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h1 { color: #333; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background-color: #f2f2f2; }
+    .passed { background-color: #d4edda; }
+    .failed { background-color: #f8d7da; }
+    .skipped { background-color: #fff3cd; }
+    .log { font-family: monospace; font-size: 12px; color: #444; }
+    img { max-width: 250px; border: 1px solid #ccc; margin-top: 5px; }
+    #chart-container { width: 80%; margin: 40px auto; }
+  </style>
+</head>
+<body>
+  <h1>Smoke Suite Execution Report</h1>
+  <p>Total Scenarios: 10 | Passed: 8 | Failed: 1 | Skipped: 1</p>
+
+  <div id="chart-container">
+    <canvas id="durationChart"></canvas>
+  </div>
+
+  <table>
+    <tr>
+      <th>Scenario</th>
+      <th>Status</th>
+      <th>Logs</th>
+      <th>Screenshot</th>
+    </tr>
+
+    <!-- Passed Scenarios -->
+    <tr class="passed">
+      <td>Login with valid credentials</td>
+      <td>Passed ✅</td>
+      <td class="log">Execution completed successfully.</td>
+      <td><img src="screenshots/login_valid.png" alt="screenshot"></td>
+    </tr>
+    <tr class="passed">
+      <td>Search functionality</td>
+      <td>Passed ✅</td>
+      <td class="log">Search results displayed correctly.</td>
+      <td><img src="screenshots/search.png" alt="screenshot"></td>
+    </tr>
+    <tr class="passed">
+      <td>Profile update</td>
+      <td>Passed ✅</td>
+      <td class="log">Profile updated and saved.</td>
+      <td><img src="screenshots/profile.png" alt="screenshot"></td>
+    </tr>
+    <tr class="passed">
+      <td>Logout flow</td>
+      <td>Passed ✅</td>
+      <td class="log">User logged out successfully.</td>
+      <td><img src="screenshots/logout.png" alt="screenshot"></td>
+    </tr>
+    <tr class="passed">
+      <td>Dashboard load</td>
+      <td>Passed ✅</td>
+      <td class="log">Dashboard widgets loaded.</td>
+      <td><img src="screenshots/dashboard.png" alt="screenshot"></td>
+    </tr>
+    <tr class="passed">
+      <td>Notifications panel</td>
+      <td>Passed ✅</td>
+      <td class="log">Notifications displayed correctly.</td>
+      <td><img src="screenshots/notifications.png" alt="screenshot"></td>
+    </tr>
+    <tr class="passed">
+      <td>Settings page</td>
+      <td>Passed ✅</td>
+      <td class="log">Settings updated successfully.</td>
+      <td><img src="screenshots/settings.png" alt="screenshot"></td>
+    </tr>
+    <tr class="passed">
+      <td>Help section</td>
+      <td>Passed ✅</td>
+      <td class="log">Help content accessible.</td>
+      <td><img src="screenshots/help.png" alt="screenshot"></td>
+    </tr>
+
+    <!-- Failed Scenario -->
+    <tr class="failed">
+      <td>Login with invalid credentials</td>
+      <td>Failed ❌</td>
+      <td class="log">
+        Error: Expected error message 'Invalid credentials' but got 'Unexpected error'.<br>
+        StackTrace: LoginSteps.cs line 42
+      </td>
+      <td><img src="screenshots/login_invalid.png" alt="screenshot"></td>
+    </tr>
+
+    <!-- Skipped Scenario -->
+    <tr class="skipped">
+      <td>Dashboard widget load (new)</td>
+      <td>Skipped ⚠️</td>
+      <td class="log">
+        Reason: Feature under development. Tagged as @skip.<br>
+        No execution performed.
+      </td>
+      <td><img src="screenshots/dashboard_skip.png" alt="screenshot"></td>
+    </tr>
+  </table>
+
+  <script>
+    const ctx = document.getElementById('durationChart').getContext('2d');
+    const durationChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: [
+          'Login Valid','Search','Profile','Logout','Dashboard',
+          'Notifications','Settings','Help','Login Invalid','Dashboard Skip'
+        ],
+        datasets: [{
+          label: 'Execution Time (seconds)',
+          data: [5, 7, 6, 4, 8, 5, 6, 4, 9, 0],
+          backgroundColor: [
+            '#28a745','#28a745','#28a745','#28a745','#28a745',
+            '#28a745','#28a745','#28a745','#dc3545','#ffc107'
+          ]
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+          title: { display: true, text: 'Test Duration per Scenario' }
+        },
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
