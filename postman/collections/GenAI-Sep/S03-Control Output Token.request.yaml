@@ -1,0 +1,21 @@
+$kind: http-request
+url: https://api.groq.com/openai/v1/chat/completions
+method: POST
+body:
+  type: json
+  content: |
+    {
+      "model": "openai/gpt-oss-20b",
+    "max_completion_tokens": 2000,
+      "messages": [
+        {
+             "role": "system",
+             "content": "You are a Senior QA Analyst experienced in converting Agile user stories into high-quality, review-ready test cases."
+        },
+        {
+          "role": "user",
+          "content": "I — INSTRUCTION\nConvert the provided User Stories and Acceptance Criteria into detailed, testable Test Cases.\n\nMANDATORY RULES:\n1) Derive test cases ONLY from the given user stories and acceptance criteria.\n2) Do NOT add assumptions or new requirements.\n3) Cover positive, negative, and validation scenarios.\n4) Write test cases from an end-user perspective.\n5) Do NOT include implementation or technical details.\n\nC — CONTEXT\nThese test cases will be used by QA teams for manual and automation testing in an enterprise healthcare application.\n\nP — PERSONA\nYou are a Senior QA Analyst experienced in converting Agile user stories into high-quality, review-ready test cases.\n\nO — OUTPUT\nReturn test cases in the following structured format:\n- TC_ID\n- Title\n- Preconditions\n- Test Steps\n- Test Data\n- Expected Result\n\nRules:\n- Each test case must be clear and independent\n- Use business-readable language only\n- One scenario per test case\n\nUSER STORY:\nAs a user, I want to record doctor activities and doctor notes so that the related functionality works as expected.\n\nACCEPTANCE CRITERIA:\nGiven the system is operational,\nWhen the user performs the intended action,\nThen the system should respond accurately and meet functional expectations.STRICTL only 5 Testcases"
+        }
+      ]
+    }
+order: 3000

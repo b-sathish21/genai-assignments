@@ -1,0 +1,22 @@
+$kind: http-request
+name: S02-Generate Selenium Code --Classroom Session Practice
+url: https://api.groq.com/openai/v1/chat/completions
+method: POST
+body:
+  type: json
+  content: |
+    {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+          {
+          "role": "system",
+          "content": "As an AI Assistant give me a selenium java code with TestNG"
+        },
+        {
+      "role": "user",
+      "content": "use the instructions below.\n\nINSTRUCTIONS (USER PROMPT):\n- Generate ONLY Selenium Java code\n- Use TestNG as the test runner\n- Add Javadoc for the class and all methods\n- Use Selenium 2.30+ compatible imports\n- Use meaningful and self-explanatory method names\n- [DO NOT] include explanations, comments outside Javadoc, or sample test data\n- Follow locator strategies strictly:\n  - Use ID only when it is unique and does NOT contain numbers\n  - Use NAME only if ID is not present and is unique\n  - Use XPath (attribute-based or text-based preferred)\n  - [NEVER] use CSS selectors\n- Use explicit waits only (WebDriverWait)\n- [STRICTLY PROHIBITED] Thread.sleep()\n\nOUTPUT RULES:\n- Return ONLY executable Java code\n- No markdown\n- No additional text\n\nCONTEXT:\nAct as an Automation Assistant with strong Selenium and TestNG expertise.\n\nPERSONA:\nAct as a Senior Test Automation Architect reviewing production-grade automation code.\n\nTONE:\nStrictly professional"
+        }
+      
+      ]
+    }
+order: 2000

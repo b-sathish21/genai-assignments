@@ -1,0 +1,82 @@
+$kind: http-request
+url: https://api.groq.com/openai/v1/audio/transcriptions
+method: POST
+headers:
+  - key: Content-Type
+    value: multipart/form-data
+    disabled: true
+body:
+  type: formdata
+  content:
+    - type: text
+      key: model
+      value: whisper-large-v3
+      disabled: false
+    - type: file
+      key: file
+      src:
+        - /D:/GenAI_Course/ClassroomSession/week02_day02/Meeting Recording.mp3.mpeg
+      disabled: false
+scripts:
+  - type: afterResponse
+    code: |-
+      var template = `
+      <style type="text/css">
+          .tftable {font-size:14px;color:#333333;width:100%;border-width: 1px;border-color: #87ceeb;border-collapse: collapse;}
+          .tftable th {font-size:18px;background-color:#87ceeb;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;text-align:left;}
+          .tftable tr {background-color:#ffffff;}
+          .tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;}
+          .tftable tr:hover {background-color:#e0ffff;}
+      </style>
+
+      <table class="tftable" border="1">
+          <tr>
+              <th>ID</th>
+              <th>Object</th>
+              <th>Created</th>
+              <th>Model</th>
+              <th>Index</th>
+              <th>Role</th>
+              <th>Content</th>
+              <th>Finish Reason</th>
+              <th>Queue Time</th>
+              <th>Prompt Tokens</th>
+              <th>Prompt Time</th>
+              <th>Completion Tokens</th>
+              <th>Completion Time</th>
+              <th>Total Tokens</th>
+              <th>Total Time</th>
+              <th>System Fingerprint</th>
+              <th>X Groq ID</th>
+          </tr>
+          
+          <tr>
+              <td>{{id}}</td>
+              <td>{{object}}</td>
+              <td>{{created}}</td>
+              <td>{{model}}</td>
+              <td>{{choices.0.index}}</td>
+              <td>{{choices.0.message.role}}</td>
+              <td>{{choices.0.message.content}}</td>
+              <td>{{choices.0.finish_reason}}</td>
+              <td>{{usage.queue_time}}</td>
+              <td>{{usage.prompt_tokens}}</td>
+              <td>{{usage.prompt_time}}</td>
+              <td>{{usage.completion_tokens}}</td>
+              <td>{{usage.completion_time}}</td>
+              <td>{{usage.total_tokens}}</td>
+              <td>{{usage.total_time}}</td>
+              <td>{{system_fingerprint}}</td>
+              <td>{{x_groq.id}}</td>
+          </tr>
+      </table>
+      `;
+
+      function constructVisualizerPayload() {
+          var res = pm.response.json();
+          return {response: res};
+      }
+
+      pm.visualizer.set(template, constructVisualizerPayload());
+    language: text/javascript
+order: 6000

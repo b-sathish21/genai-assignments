@@ -1,0 +1,20 @@
+$kind: http-request
+url: https://api.groq.com/openai/v1/chat/completions
+method: POST
+body:
+  type: json
+  content: |-
+    {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a Senior QA Analyst experienced in converting Agile user stories into high-quality, review-ready test cases."
+        },
+        {
+          "role": "user",
+          "content": "User Story: HC-311 — Automated Insurance Pre-Authorization for Radiology Tests\n\nSummary:\nAs a billing coordinator, I want the system to automatically verify a patient’s insurance coverage and pre-authorize radiology tests before scheduling, so that delays and manual verification errors can be reduced.\n\nDescription:\nBefore scheduling any CT, MRI, or ultrasound procedure, the system should trigger an API call to the insurance provider to check if the procedure is covered under the patient’s plan. If authorization is required, it should initiate the pre-authorization process automatically and store the approval ID in the patient record.\n\nEpic:\nFinancial & Billing Workflows – Insurance Automation\n\nAcceptance Criteria:\n\nGiven a patient is scheduled for a radiology test,\nWhen the billing coordinator selects “Schedule Test”,\nThen the system should verify insurance eligibility via API.\n\nGiven the test requires pre-authorization,\nWhen the request is sent,\nThen the system should store the authorization ID and approval date in the billing record.\n\nGiven a test is not covered,\nWhen the result is received,\nThen the system should notify both the coordinator and patient, and offer alternative payment options.\n\nPriority: P1\nRisk: Medium\nStatus: In Progress"
+        }
+      ]
+    }
+order: 1000

@@ -1,0 +1,7 @@
+workspace:
+  id: 063012bf-d691-4f42-8312-653fe5b105cf
+cloudResources:
+  collections:
+    ../postman/collections/GenAI-Sep: 15241556-d3271aa6-2e66-421c-b717-60bb77a5db51
+  globals:
+    ../postman/globals/workspace.globals.yaml: cb6f9c92-afbe-432a-80a3-b4a060c9b4dd

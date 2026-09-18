@@ -1,0 +1,13 @@
+$kind: http-request
+url: https://api.groq.com/openai/v1/audio/speech
+method: POST
+body:
+  type: json
+  content: |-
+    {
+        "model": "canopylabs/orpheus-v1-english",
+        "input": "I love building and shipping new features for our users!",
+        "voice": "autumn",
+        "response_format": "wav"
+      }
+order: 10000

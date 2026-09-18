@@ -1,0 +1,34 @@
+$kind: http-request
+url: https://api.groq.com/openai/v1/chat/completions
+method: POST
+body:
+  type: json
+  content: |-
+    {
+      "model": "openai/gpt-oss-120b",
+      "temperature": 0.1,
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a Senior Test Automation Architect."
+        },
+        {
+          "role": "user",
+          "content": "Generate Selenium 4 Java code for automating a login page using TestNG without an Assertions and onl code no comments or markdown.\n\nRequirements:\n- Use ChromeDriver\n- Use WebDriverWait with explicit waits only\n- Do not use Thread.sleep()\n- Use TestNG annotations\n- Automate username, password, login button, and successful login verification\n- Use suitable Selenium locators\n- Return only Java code\n- Do not include markdown or explanations"
+        }
+      ]
+    }
+scripts:
+  - type: afterResponse
+    code: |
+      pm.test("Status code is 200", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Response has chat completion structure", function () {
+          var jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property('id');
+          pm.expect(jsonData).to.have.property('choices');
+          pm.expect(jsonData.choices).to.be.an('array');
+      });
+order: 5000

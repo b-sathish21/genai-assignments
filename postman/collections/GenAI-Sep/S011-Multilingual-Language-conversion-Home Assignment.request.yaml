@@ -1,0 +1,20 @@
+$kind: http-request
+url: https://api.groq.com/openai/v1/chat/completions
+method: POST
+body:
+  type: json
+  content: |-
+    {
+      "model": "openai/gpt-oss-20b",
+      "messages": [
+        {
+          "role": "system",
+          "content": "Act as a Language Translator translating the user instructions in specified language"
+        },
+        {
+          "role": "user",
+          "content": "Hello Good Morning .Transalte in Tamil"
+        }
+      ]
+    }
+order: 11000
