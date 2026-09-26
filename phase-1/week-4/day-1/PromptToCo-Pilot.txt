@@ -1,0 +1,20 @@
+The current flow is to 
+ - accept JSON or YAML file as input 
+ - then validate the file as soon as file is inputted if the file is valid then displays "Proceed to generate testcases" button
+ - When "Proceed to generate testcases" button is clicked then Testcases generation process happens finally displaying the generated test cases along with export option in "JSON" | "Excel" | "Swagger" | "Postman" formats.
+
+[Strict] No impact on existing code/ process.
+
+I want to update the input part for accepting URL then follow the rest process from validating the inputs.
+For that I want to provide choice to user to choose between URL or File by displaying the choices in radio button.
+
+[Strict] Display two radio button "URL" and "File" making either one is enabled.
+[Strict] Make File radio button as default.
+[Strict] When URL radio button is chosen, then a input text field is displayed below for filling the URL and File inputting area disappears.
+	 - below the input text field "Validate" button and "Clear" button shall be displayed.
+	 - On clicking the clear button the filled value in the input text field shall be cleared.
+	 - On clicking the validate button,
+		> both button shall be frozen
+		> Validate panel shall be displayed and validation process shall be started following the rest of the process.
+
+Analyze the impacted file and code.

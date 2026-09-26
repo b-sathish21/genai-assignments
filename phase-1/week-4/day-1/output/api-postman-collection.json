@@ -1,0 +1,1638 @@
+{
+  "item": [
+    {
+      "id": "ec38d7ea-b078-4e88-bdb7-27e333922164",
+      "name": "Authentication",
+      "description": {
+        "content": "Generate an authentication token for protected operations.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "26bf5e55-8a31-44fc-bb70-9af3143f2683",
+          "name": "Create authentication token",
+          "request": {
+            "name": "Create authentication token",
+            "description": {},
+            "url": {
+              "path": [
+                "auth"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"password123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "125897ed-4bc0-4558-b387-25a301734cde",
+              "name": "Authentication result. A successful response contains a token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"password123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"token\": \"abc123\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6c504f3f-f8b5-4545-aa42-e182852d04ea",
+              "name": "Invalid request or malformed input.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"password123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "Bad Request",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Response status is not a server error', function () {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "pm.test('Response time is recorded', function () {",
+                  "  pm.expect(pm.response.responseTime).to.be.a('number');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "bb3dea14-e7c2-46ff-a0f0-0e7ee2952061",
+      "name": "Booking",
+      "description": {
+        "content": "Create, retrieve, update, and delete hotel bookings.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "aee18fce-00e4-475e-a0a7-2863ba5cb230",
+          "name": "Get booking IDs",
+          "request": {
+            "name": "Get booking IDs",
+            "description": {
+              "content": "Returns booking identifiers, optionally filtered by guest name or booking dates.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "booking"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "firstname",
+                  "value": "Jim",
+                  "description": "Filter by the guest's first name."
+                },
+                {
+                  "disabled": false,
+                  "key": "lastname",
+                  "value": "Brown",
+                  "description": "Filter by the guest's last name."
+                },
+                {
+                  "disabled": false,
+                  "key": "checkin",
+                  "value": "2026-01-01",
+                  "description": "Filter by check-in date."
+                },
+                {
+                  "disabled": false,
+                  "key": "checkout",
+                  "value": "2026-01-10",
+                  "description": "Filter by check-out date."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d1f60a7c-18e6-49f9-aeb2-97822b190f4c",
+              "name": "A list of matching booking IDs.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "booking"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "firstname",
+                      "value": "Jim"
+                    },
+                    {
+                      "key": "lastname",
+                      "value": "Brown"
+                    },
+                    {
+                      "key": "checkin",
+                      "value": "2026-01-01"
+                    },
+                    {
+                      "key": "checkout",
+                      "value": "2026-01-10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"bookingid\": 1\n  },\n  {\n    \"bookingid\": 2\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "93e1dece-242c-460d-ab84-7bf2de5d5de7",
+              "name": "Invalid request or malformed input.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "booking"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "firstname",
+                      "value": "Jim"
+                    },
+                    {
+                      "key": "lastname",
+                      "value": "Brown"
+                    },
+                    {
+                      "key": "checkin",
+                      "value": "2026-01-01"
+                    },
+                    {
+                      "key": "checkout",
+                      "value": "2026-01-10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "Bad Request",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Response status is not a server error', function () {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "pm.test('Response time is recorded', function () {",
+                  "  pm.expect(pm.response.responseTime).to.be.a('number');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b3ef4364-3df8-4131-9271-27f24197ac94",
+          "name": "Create a booking",
+          "request": {
+            "name": "Create a booking",
+            "description": {},
+            "url": {
+              "path": [
+                "booking"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstname\": \"Jim\",\n  \"lastname\": \"Brown\",\n  \"totalprice\": 111,\n  \"depositpaid\": true,\n  \"bookingdates\": {\n    \"checkin\": \"2026-01-01\",\n    \"checkout\": \"2026-01-10\"\n  },\n  \"additionalneeds\": \"Breakfast\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "55ad81ac-006e-4fdc-95ea-4efcdfa273de",
+              "name": "Booking created successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "booking"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"firstname\": \"Jim\",\n  \"lastname\": \"Brown\",\n  \"totalprice\": 111,\n  \"depositpaid\": true,\n  \"bookingdates\": {\n    \"checkin\": \"2026-01-01\",\n    \"checkout\": \"2026-01-10\"\n  },\n  \"additionalneeds\": \"Breakfast\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"bookingid\": 1,\n  \"booking\": {\n    \"firstname\": \"Jim\",\n    \"lastname\": \"Brown\",\n    \"totalprice\": 111,\n    \"depositpaid\": true,\n    \"bookingdates\": {\n      \"checkin\": \"2026-01-01\",\n      \"checkout\": \"2026-01-10\"\n    },\n    \"additionalneeds\": \"Breakfast\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e74da70a-d860-4ed0-948d-329d1f63813c",
+              "name": "Invalid request or malformed input.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "booking"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"firstname\": \"Jim\",\n  \"lastname\": \"Brown\",\n  \"totalprice\": 111,\n  \"depositpaid\": true,\n  \"bookingdates\": {\n    \"checkin\": \"2026-01-01\",\n    \"checkout\": \"2026-01-10\"\n  },\n  \"additionalneeds\": \"Breakfast\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "Bad Request",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Response status is not a server error', function () {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "pm.test('Response time is recorded', function () {",
+                  "  pm.expect(pm.response.responseTime).to.be.a('number');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e21a38ba-8a42-4dd0-b34e-6de890f88c2c",
+          "name": "Get a booking",
+          "request": {
+            "name": "Get a booking",
+            "description": {},
+            "url": {
+              "path": [
+                "booking",
+                ":bookingId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1",
+                  "key": "bookingId",
+                  "description": "(Required) Numeric identifier of the booking."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7016fc6d-ec94-49e7-98ce-7178d06fa911",
+              "name": "Booking details.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "booking",
+                    ":bookingId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "1",
+                      "key": "bookingId",
+                      "description": "(Required) Numeric identifier of the booking."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"firstname\": \"Jim\",\n  \"lastname\": \"Brown\",\n  \"totalprice\": 111,\n  \"depositpaid\": true,\n  \"bookingdates\": {\n    \"checkin\": \"2026-01-01\",\n    \"checkout\": \"2026-01-10\"\n  },\n  \"additionalneeds\": \"Breakfast\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "912c854b-c7f5-4ceb-813e-cf5b7c58c3c3",
+              "name": "Booking not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "booking",
+                    ":bookingId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "1",
+                      "key": "bookingId",
+                      "description": "(Required) Numeric identifier of the booking."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "Not Found",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Response status is not a server error', function () {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "pm.test('Response time is recorded', function () {",
+                  "  pm.expect(pm.response.responseTime).to.be.a('number');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "32259753-daf5-41ab-b0b7-09e36f7e1ec7",
+          "name": "Fully update a booking",
+          "request": {
+            "name": "Fully update a booking",
+            "description": {
+              "content": "Requires either a valid token cookie or HTTP Basic authentication.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "booking",
+                ":bookingId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1",
+                  "key": "bookingId",
+                  "description": "(Required) Numeric identifier of the booking."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "token"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstname\": \"James\",\n  \"lastname\": \"Brown\",\n  \"totalprice\": 222,\n  \"depositpaid\": true,\n  \"bookingdates\": {\n    \"checkin\": \"2026-02-01\",\n    \"checkout\": \"2026-02-10\"\n  },\n  \"additionalneeds\": \"Breakfast\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "0e75f292-7579-42b9-beaa-869fd221c9ae",
+              "name": "Booking updated successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "booking",
+                    ":bookingId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "1",
+                      "key": "bookingId",
+                      "description": "(Required) Numeric identifier of the booking."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"firstname\": \"James\",\n  \"lastname\": \"Brown\",\n  \"totalprice\": 222,\n  \"depositpaid\": true,\n  \"bookingdates\": {\n    \"checkin\": \"2026-02-01\",\n    \"checkout\": \"2026-02-10\"\n  },\n  \"additionalneeds\": \"Breakfast\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"firstname\": \"Jim\",\n  \"lastname\": \"Brown\",\n  \"totalprice\": 111,\n  \"depositpaid\": true,\n  \"bookingdates\": {\n    \"checkin\": \"2026-01-01\",\n    \"checkout\": \"2026-01-10\"\n  },\n  \"additionalneeds\": \"Breakfast\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c85c7b68-bbb1-4054-8333-75f0ae8def42",
+              "name": "Invalid request or malformed input.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "booking",
+                    ":bookingId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "1",
+                      "key": "bookingId",
+                      "description": "(Required) Numeric identifier of the booking."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"firstname\": \"James\",\n  \"lastname\": \"Brown\",\n  \"totalprice\": 222,\n  \"depositpaid\": true,\n  \"bookingdates\": {\n    \"checkin\": \"2026-02-01\",\n    \"checkout\": \"2026-02-10\"\n  },\n  \"additionalneeds\": \"Breakfast\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "Bad Request",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e5b5d4a4-34fc-4370-adc7-ee09bd48a7c9",
+              "name": "Authentication failed or was not provided.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "booking",
+                    ":bookingId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "1",
+                      "key": "bookingId",
+                      "description": "(Required) Numeric identifier of the booking."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"firstname\": \"James\",\n  \"lastname\": \"Brown\",\n  \"totalprice\": 222,\n  \"depositpaid\": true,\n  \"bookingdates\": {\n    \"checkin\": \"2026-02-01\",\n    \"checkout\": \"2026-02-10\"\n  },\n  \"additionalneeds\": \"Breakfast\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "Forbidden",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d9f3784f-d5f0-4421-88b3-f5640e989d69",
+              "name": "Booking not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "booking",
+                    ":bookingId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "1",
+                      "key": "bookingId",
+                      "description": "(Required) Numeric identifier of the booking."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"firstname\": \"James\",\n  \"lastname\": \"Brown\",\n  \"totalprice\": 222,\n  \"depositpaid\": true,\n  \"bookingdates\": {\n    \"checkin\": \"2026-02-01\",\n    \"checkout\": \"2026-02-10\"\n  },\n  \"additionalneeds\": \"Breakfast\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "Not Found",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Response status is not a server error', function () {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "pm.test('Response time is recorded', function () {",
+                  "  pm.expect(pm.response.responseTime).to.be.a('number');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4d9327eb-3f55-4746-aab3-3595496f82bf",
+          "name": "Partially update a booking",
+          "request": {
+            "name": "Partially update a booking",
+            "description": {
+              "content": "Requires either a valid token cookie or HTTP Basic authentication.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "booking",
+                ":bookingId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1",
+                  "key": "bookingId",
+                  "description": "(Required) Numeric identifier of the booking."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "token"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstname\": \"James\",\n  \"lastname\": \"Brown\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "50044aa0-1a6e-47e3-b698-0c37ce4d9da1",
+              "name": "Booking updated successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "booking",
+                    ":bookingId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "1",
+                      "key": "bookingId",
+                      "description": "(Required) Numeric identifier of the booking."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"firstname\": \"James\",\n  \"lastname\": \"Brown\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"firstname\": \"Jim\",\n  \"lastname\": \"Brown\",\n  \"totalprice\": 111,\n  \"depositpaid\": true,\n  \"bookingdates\": {\n    \"checkin\": \"2026-01-01\",\n    \"checkout\": \"2026-01-10\"\n  },\n  \"additionalneeds\": \"Breakfast\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d5f75580-eadb-4764-a55d-2e744753892a",
+              "name": "Invalid request or malformed input.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "booking",
+                    ":bookingId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "1",
+                      "key": "bookingId",
+                      "description": "(Required) Numeric identifier of the booking."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"firstname\": \"James\",\n  \"lastname\": \"Brown\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "Bad Request",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d56abf8b-2a55-4dde-b39b-12d4303fb108",
+              "name": "Authentication failed or was not provided.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "booking",
+                    ":bookingId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "1",
+                      "key": "bookingId",
+                      "description": "(Required) Numeric identifier of the booking."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"firstname\": \"James\",\n  \"lastname\": \"Brown\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "Forbidden",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f7479f8c-2124-4af6-bc24-9f6ee266c8f0",
+              "name": "Booking not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "booking",
+                    ":bookingId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "1",
+                      "key": "bookingId",
+                      "description": "(Required) Numeric identifier of the booking."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"firstname\": \"James\",\n  \"lastname\": \"Brown\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "Not Found",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Response status is not a server error', function () {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "pm.test('Response time is recorded', function () {",
+                  "  pm.expect(pm.response.responseTime).to.be.a('number');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "de643094-2b27-4f9e-8c31-21f2fc55d5bf",
+          "name": "Delete a booking",
+          "request": {
+            "name": "Delete a booking",
+            "description": {
+              "content": "Requires either a valid token cookie or HTTP Basic authentication.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "booking",
+                ":bookingId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "1",
+                  "key": "bookingId",
+                  "description": "(Required) Numeric identifier of the booking."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "token"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "ede5ecf5-2c08-4a43-b3fd-5f8eac0b63d8",
+              "name": "Booking deleted successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "booking",
+                    ":bookingId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "1",
+                      "key": "bookingId",
+                      "description": "(Required) Numeric identifier of the booking."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "Created",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4c6e9467-0c07-4496-94f6-1c7f8c42c958",
+              "name": "Authentication failed or was not provided.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "booking",
+                    ":bookingId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "1",
+                      "key": "bookingId",
+                      "description": "(Required) Numeric identifier of the booking."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "Forbidden",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3069de29-d12f-42f8-a855-398e0d3d18d8",
+              "name": "Booking not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "booking",
+                    ":bookingId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "1",
+                      "key": "bookingId",
+                      "description": "(Required) Numeric identifier of the booking."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "Not Found",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Response status is not a server error', function () {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "pm.test('Response time is recorded', function () {",
+                  "  pm.expect(pm.response.responseTime).to.be.a('number');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "5453c3e6-dd0a-47b4-a853-2ae271ba7ec1",
+      "name": "Health",
+      "description": {
+        "content": "Service health-check operation.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "23915b00-0fed-4bcc-a2f0-e91ab88574b8",
+          "name": "Health check",
+          "request": {
+            "name": "Health check",
+            "description": {},
+            "url": {
+              "path": [
+                "ping"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7654d5e0-10db-4c85-9244-04a0987ff698",
+              "name": "Service is available.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ping"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "Created",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Response status is not a server error', function () {",
+                  "  pm.expect(pm.response.code).to.be.below(500);",
+                  "});",
+                  "pm.test('Response time is recorded', function () {",
+                  "  pm.expect(pm.response.responseTime).to.be.a('number');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://restful-booker.herokuapp.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "ca42cd45-aa4a-428b-83b8-d2ac5040768d",
+    "name": "Restful Booker API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "OpenAPI specification for the Restful Booker API playground.\nThe service provides authentication and CRUD operations for hotel bookings.\nData on the public environment may reset periodically.\n\n\nContact Support:\n Name: Restful Booker",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,339 @@
+{
+  "summary": {
+    "total": 11
+  },
+  "testCases": [
+    {
+      "testCaseId": "TC-API-001",
+      "operationId": "addPet",
+      "endpoint": "/pet",
+      "method": "POST",
+      "category": "positive",
+      "title": "Add a valid new pet",
+      "priority": "High",
+      "preconditions": [
+        "The API service is available."
+      ],
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "pathParameters": {},
+      "queryParameters": {},
+      "requestBody": {
+        "id": 101,
+        "name": "doggie",
+        "photoUrls": [
+          "https://example.com/images/doggie.jpg"
+        ],
+        "status": "available"
+      },
+      "steps": [
+        "Send a POST request to /pet with valid pet JSON.",
+        "Verify response status code."
+      ],
+      "expectedStatusCode": 200,
+      "expectedResult": "Pet is created successfully.",
+      "sourceReferences": [
+        "paths./pet.post"
+      ]
+    },
+    {
+      "testCaseId": "TC-API-002",
+      "operationId": "findPetsByStatus",
+      "endpoint": "/pet/findByStatus",
+      "method": "GET",
+      "category": "positive",
+      "title": "List pets by valid status",
+      "priority": "High",
+      "preconditions": [
+        "The API service is available."
+      ],
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "pathParameters": {},
+      "queryParameters": {
+        "status": [
+          "available"
+        ]
+      },
+      "steps": [
+        "Send a GET request to /pet/findByStatus?status=available.",
+        "Verify response contains matching pets."
+      ],
+      "expectedStatusCode": 200,
+      "expectedResult": "API returns pets matching available status.",
+      "sourceReferences": [
+        "paths./pet/findByStatus.get"
+      ]
+    },
+    {
+      "testCaseId": "TC-API-003",
+      "operationId": "addPet",
+      "endpoint": "/pet",
+      "method": "POST",
+      "category": "negative",
+      "title": "Add pet with invalid input",
+      "priority": "High",
+      "preconditions": [
+        "The API service is available."
+      ],
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "pathParameters": {},
+      "queryParameters": {},
+      "requestBody": {
+        "name": "test"
+      },
+      "steps": [
+        "Send a POST request to /pet with incomplete body.",
+        "Verify error status."
+      ],
+      "expectedStatusCode": 405,
+      "expectedResult": "API returns 405 Invalid input.",
+      "sourceReferences": [
+        "paths./pet.post"
+      ]
+    },
+    {
+      "testCaseId": "TC-API-004",
+      "operationId": "getPetById",
+      "endpoint": "/pet/{petId}",
+      "method": "GET",
+      "category": "negative",
+      "title": "Get pet with invalid ID",
+      "priority": "Medium",
+      "preconditions": [
+        "The API service is available."
+      ],
+      "headers": {
+        "api_key": ""
+      },
+      "pathParameters": {
+        "petId": -1
+      },
+      "queryParameters": {},
+      "steps": [
+        "Send a GET request to /pet/{petId} with negative ID.",
+        "Verify response status."
+      ],
+      "expectedStatusCode": 400,
+      "expectedResult": "API returns 400 Invalid ID supplied.",
+      "sourceReferences": [
+        "paths./pet/{petId}.get"
+      ]
+    },
+    {
+      "testCaseId": "TC-API-005",
+      "operationId": "findPetsByStatus",
+      "endpoint": "/pet/findByStatus",
+      "method": "GET",
+      "category": "validation",
+      "title": "Invalid status value enumeration",
+      "priority": "High",
+      "preconditions": [
+        "The API service is available."
+      ],
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "pathParameters": {},
+      "queryParameters": {
+        "status": [
+          "unknown"
+        ]
+      },
+      "steps": [
+        "Send GET request with status not in enum.",
+        "Capture error response."
+      ],
+      "expectedStatusCode": 400,
+      "expectedResult": "API returns 400 Invalid status value.",
+      "sourceReferences": [
+        "paths./pet/findByStatus.get"
+      ]
+    },
+    {
+      "testCaseId": "TC-API-006",
+      "operationId": "addPet",
+      "endpoint": "/pet",
+      "method": "POST",
+      "category": "validation",
+      "title": "Missing required body fields",
+      "priority": "High",
+      "preconditions": [
+        "The API service is available."
+      ],
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "pathParameters": {},
+      "queryParameters": {},
+      "requestBody": {
+        "id": 101
+      },
+      "steps": [
+        "Send POST request missing name and photoUrls.",
+        "Verify error status."
+      ],
+      "expectedStatusCode": 405,
+      "expectedResult": "API rejects missing required fields.",
+      "sourceReferences": [
+        "paths./pet.post"
+      ]
+    },
+    {
+      "testCaseId": "TC-API-007",
+      "operationId": "getPetById",
+      "endpoint": "/pet/{petId}",
+      "method": "GET",
+      "category": "authentication",
+      "title": "Missing api_key header",
+      "priority": "High",
+      "preconditions": [
+        "The API service is available."
+      ],
+      "headers": {},
+      "pathParameters": {
+        "petId": 101
+      },
+      "queryParameters": {},
+      "steps": [
+        "Send GET request without api_key.",
+        "Verify authentication failure."
+      ],
+      "expectedStatusCode": 404,
+      "expectedResult": "API returns 404 Pet not found or missing credentials.",
+      "sourceReferences": [
+        "paths./pet/{petId}.get",
+        "securityDefinitions.api_key"
+      ]
+    },
+    {
+      "testCaseId": "TC-API-008",
+      "operationId": "updatePet",
+      "endpoint": "/pet",
+      "method": "PUT",
+      "category": "authorization",
+      "title": "Missing write:pets scope",
+      "priority": "High",
+      "preconditions": [
+        "The API service is available."
+      ],
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "pathParameters": {},
+      "queryParameters": {},
+      "requestBody": {
+        "name": "updated",
+        "photoUrls": []
+      },
+      "steps": [
+        "Send PUT with valid body but missing OAuth scope.",
+        "Verify authorization error."
+      ],
+      "expectedStatusCode": 405,
+      "expectedResult": "API returns 405 Validation exception.",
+      "sourceReferences": [
+        "paths./pet.put",
+        "securityDefinitions.petstore_auth"
+      ]
+    },
+    {
+      "testCaseId": "TC-API-009",
+      "operationId": "deletePet",
+      "endpoint": "/pet/{petId}",
+      "method": "DELETE",
+      "category": "error-handling",
+      "title": "Delete non-existent pet",
+      "priority": "High",
+      "preconditions": [
+        "The API service is available."
+      ],
+      "headers": {
+        "api_key": "testkey"
+      },
+      "pathParameters": {
+        "petId": 999
+      },
+      "queryParameters": {},
+      "steps": [
+        "Send DELETE request for missing ID.",
+        "Verify 404 response."
+      ],
+      "expectedStatusCode": 404,
+      "expectedResult": "API returns 404 Pet not found.",
+      "sourceReferences": [
+        "paths./pet/{petId}.delete"
+      ]
+    },
+    {
+      "testCaseId": "TC-API-010",
+      "operationId": "updatePet",
+      "endpoint": "/pet",
+      "method": "PUT",
+      "category": "negative",
+      "title": "Update existing pet with wrong data",
+      "priority": "High",
+      "preconditions": [
+        "Pet exists in store."
+      ],
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "pathParameters": {},
+      "queryParameters": {},
+      "requestBody": {
+        "id": 101,
+        "name": "fido",
+        "photoUrls": [
+          "https://example.com/101.jpg"
+        ]
+      },
+      "steps": [
+        "Send PUT to update name with invalid format.",
+        "Verify error status."
+      ],
+      "expectedStatusCode": 405,
+      "expectedResult": "Pet update failed with 405 validation exception.",
+      "sourceReferences": [
+        "paths./pet.put"
+      ]
+    },
+    {
+      "testCaseId": "TC-API-011",
+      "operationId": "uploadFile",
+      "endpoint": "/pet/{petId}/uploadImage",
+      "method": "POST",
+      "category": "positive",
+      "title": "Upload image for pet",
+      "priority": "Medium",
+      "preconditions": [
+        "The API service is available.",
+        "Pet exists."
+      ],
+      "headers": {
+        "Content-Type": "multipart/form-data"
+      },
+      "pathParameters": {
+        "petId": 101
+      },
+      "queryParameters": {},
+      "requestBody": {
+        "additionalMetadata": "image upload",
+        "file": "data:file/plain;base64,SG"
+      },
+      "steps": [
+        "Send POST with image file.",
+        "Verify response code."
+      ],
+      "expectedStatusCode": 200,
+      "expectedResult": "Image uploaded successfully.",
+      "sourceReferences": [
+        "paths./pet/{petId}/uploadImage.post"
+      ]
+    }
+  ]
+}

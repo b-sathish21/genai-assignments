@@ -1,0 +1,432 @@
+{
+  "summary": {
+    "total": 15
+  },
+  "testCases": [
+    {
+      "testCaseId": "TC-API-001",
+      "operationId": "createToken",
+      "endpoint": "/auth",
+      "method": "POST",
+      "category": "positive",
+      "title": "Create auth token with valid credentials",
+      "priority": "High",
+      "preconditions": [
+        "Service is available."
+      ],
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "pathParameters": {},
+      "queryParameters": {},
+      "requestBody": {
+        "username": "admin",
+        "password": "password123"
+      },
+      "steps": [
+        "Send POST request to /auth.",
+        "Capture the token."
+      ],
+      "expectedStatusCode": 200,
+      "expectedResult": "Returns token string in response body.",
+      "sourceReferences": [
+        "paths./auth.post"
+      ]
+    },
+    {
+      "testCaseId": "TC-API-002",
+      "operationId": "createBooking",
+      "endpoint": "/booking",
+      "method": "POST",
+      "category": "positive",
+      "title": "Create booking with valid data",
+      "priority": "High",
+      "preconditions": [
+        "Service is available."
+      ],
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "pathParameters": {},
+      "queryParameters": {},
+      "requestBody": {
+        "firstname": "Jim",
+        "lastname": "Brown",
+        "totalprice": 111,
+        "depositpaid": true,
+        "bookingdates": {
+          "checkin": "2026-01-01",
+          "checkout": "2026-01-10"
+        }
+      },
+      "steps": [
+        "Send POST request to /booking.",
+        "Capture booking ID."
+      ],
+      "expectedStatusCode": 200,
+      "expectedResult": "Returns created booking with ID.",
+      "sourceReferences": [
+        "paths./booking.post"
+      ]
+    },
+    {
+      "testCaseId": "TC-API-003",
+      "operationId": "getBooking",
+      "endpoint": "/booking/{bookingId}",
+      "method": "GET",
+      "category": "positive",
+      "title": "Retrieve booking by valid ID",
+      "priority": "High",
+      "preconditions": [
+        "Booking exists."
+      ],
+      "headers": {},
+      "pathParameters": {
+        "bookingId": 1
+      },
+      "queryParameters": {},
+      "steps": [
+        "Send GET request to /booking/{bookingId}.",
+        "Verify details."
+      ],
+      "expectedStatusCode": 200,
+      "expectedResult": "Returns full booking details.",
+      "sourceReferences": [
+        "paths./booking/{bookingId}.get"
+      ]
+    },
+    {
+      "testCaseId": "TC-API-004",
+      "operationId": "createToken",
+      "endpoint": "/auth",
+      "method": "POST",
+      "category": "negative",
+      "title": "Auth request with bad credentials",
+      "priority": "Medium",
+      "preconditions": [],
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "pathParameters": {},
+      "queryParameters": {},
+      "requestBody": {
+        "username": "invalid",
+        "password": "wrong"
+      },
+      "steps": [
+        "Send POST request to /auth.",
+        "Check error response."
+      ],
+      "expectedStatusCode": 400,
+      "expectedResult": "Returns bad credentials reason.",
+      "sourceReferences": [
+        "paths./auth.post"
+      ]
+    },
+    {
+      "testCaseId": "TC-API-005",
+      "operationId": "getBooking",
+      "endpoint": "/booking/{bookingId}",
+      "method": "GET",
+      "category": "negative",
+      "title": "Retrieve booking with non-existent ID",
+      "priority": "Medium",
+      "preconditions": [],
+      "headers": {},
+      "pathParameters": {
+        "bookingId": 9999
+      },
+      "queryParameters": {},
+      "steps": [
+        "Send GET request to /booking/{bookingId}.",
+        "Check error response."
+      ],
+      "expectedStatusCode": 404,
+      "expectedResult": "Returns not found message.",
+      "sourceReferences": [
+        "paths./booking/{bookingId}.get"
+      ]
+    },
+    {
+      "testCaseId": "TC-API-006",
+      "operationId": "createBooking",
+      "endpoint": "/booking",
+      "method": "POST",
+      "category": "boundary",
+      "title": "Create booking with minimum price zero",
+      "priority": "Medium",
+      "preconditions": [],
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "pathParameters": {},
+      "queryParameters": {},
+      "requestBody": {
+        "firstname": "Jim",
+        "lastname": "Brown",
+        "totalprice": 0,
+        "depositpaid": false,
+        "bookingdates": {
+          "checkin": "2026-01-01",
+          "checkout": "2026-01-02"
+        }
+      },
+      "steps": [
+        "Send POST request to /booking.",
+        "Verify price is accepted."
+      ],
+      "expectedStatusCode": 200,
+      "expectedResult": "Book created with zero price.",
+      "sourceReferences": [
+        "paths./booking.post"
+      ]
+    },
+    {
+      "testCaseId": "TC-API-007",
+      "operationId": "getBookingIds",
+      "endpoint": "/booking",
+      "method": "GET",
+      "category": "boundary",
+      "title": "Filter bookings by check-in date",
+      "priority": "Medium",
+      "preconditions": [],
+      "headers": {},
+      "pathParameters": {},
+      "queryParameters": {
+        "checkin": "2026-01-01"
+      },
+      "steps": [
+        "Send GET request to /booking.",
+        "Check filtered list."
+      ],
+      "expectedStatusCode": 200,
+      "expectedResult": "Returns matching booking IDs.",
+      "sourceReferences": [
+        "paths./booking.get"
+      ]
+    },
+    {
+      "testCaseId": "TC-API-008",
+      "operationId": "createToken",
+      "endpoint": "/auth",
+      "method": "POST",
+      "category": "authentication",
+      "title": "Generate auth token for requests",
+      "priority": "High",
+      "preconditions": [
+        "Valid username and password."
+      ],
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "pathParameters": {},
+      "queryParameters": {},
+      "requestBody": {
+        "username": "admin",
+        "password": "password123"
+      },
+      "steps": [
+        "Request token.",
+        "Extract cookie value."
+      ],
+      "expectedStatusCode": 200,
+      "expectedResult": "Returns token for authentication.",
+      "sourceReferences": [
+        "paths./auth.post"
+      ]
+    },
+    {
+      "testCaseId": "TC-API-009",
+      "operationId": "updateBooking",
+      "endpoint": "/booking/{bookingId}",
+      "method": "PUT",
+      "category": "authentication",
+      "title": "Update booking with valid cookie token",
+      "priority": "High",
+      "preconditions": [
+        "Valid token cookie exists."
+      ],
+      "headers": {
+        "Cookie": "token=abc123",
+        "Content-Type": "application/json"
+      },
+      "pathParameters": {
+        "bookingId": 1
+      },
+      "queryParameters": {},
+      "requestBody": {
+        "firstname": "James",
+        "lastname": "Brown",
+        "totalprice": 222,
+        "depositpaid": true,
+        "bookingdates": {
+          "checkin": "2026-02-01",
+          "checkout": "2026-02-10"
+        }
+      },
+      "steps": [
+        "Send PUT request with cookie.",
+        "Verify update."
+      ],
+      "expectedStatusCode": 200,
+      "expectedResult": "Booking details updated.",
+      "sourceReferences": [
+        "paths./booking/{bookingId}.put"
+      ]
+    },
+    {
+      "testCaseId": "TC-API-010",
+      "operationId": "updateBooking",
+      "endpoint": "/booking/{bookingId}",
+      "method": "PUT",
+      "category": "authorization",
+      "title": "Update booking without authentication",
+      "priority": "Medium",
+      "preconditions": [],
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "pathParameters": {
+        "bookingId": 1
+      },
+      "queryParameters": {},
+      "requestBody": {
+        "firstname": "James"
+      },
+      "steps": [
+        "Send PUT request without auth.",
+        "Check error."
+      ],
+      "expectedStatusCode": 403,
+      "expectedResult": "Returns forbidden error.",
+      "sourceReferences": [
+        "paths./booking/{bookingId}.put"
+      ]
+    },
+    {
+      "testCaseId": "TC-API-011",
+      "operationId": "deleteBooking",
+      "endpoint": "/booking/{bookingId}",
+      "method": "DELETE",
+      "category": "authorization",
+      "title": "Delete booking with invalid token",
+      "priority": "Medium",
+      "preconditions": [],
+      "headers": {
+        "Cookie": "token=invalid"
+      },
+      "pathParameters": {
+        "bookingId": 1
+      },
+      "queryParameters": {},
+      "steps": [
+        "Send DELETE request.",
+        "Check error."
+      ],
+      "expectedStatusCode": 403,
+      "expectedResult": "Returns forbidden response.",
+      "sourceReferences": [
+        "paths./booking/{bookingId}.delete"
+      ]
+    },
+    {
+      "testCaseId": "TC-API-012",
+      "operationId": "createBooking",
+      "endpoint": "/booking",
+      "method": "POST",
+      "category": "validation",
+      "title": "Create booking with missing required field",
+      "priority": "Medium",
+      "preconditions": [],
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "pathParameters": {},
+      "queryParameters": {},
+      "requestBody": {
+        "firstname": "Jim"
+      },
+      "steps": [
+        "Send POST request with incomplete body.",
+        "Check error."
+      ],
+      "expectedStatusCode": 400,
+      "expectedResult": "Returns invalid request error.",
+      "sourceReferences": [
+        "paths./booking.post"
+      ]
+    },
+    {
+      "testCaseId": "TC-API-013",
+      "operationId": "getBookingIds",
+      "endpoint": "/booking",
+      "method": "GET",
+      "category": "validation",
+      "title": "Filter bookings with invalid date format",
+      "priority": "Medium",
+      "preconditions": [],
+      "headers": {},
+      "pathParameters": {},
+      "queryParameters": {
+        "checkin": "invalid-date"
+      },
+      "steps": [
+        "Send GET request with bad query param."
+      ],
+      "expectedStatusCode": 400,
+      "expectedResult": "Returns invalid request error.",
+      "sourceReferences": [
+        "paths./booking.get"
+      ]
+    },
+    {
+      "testCaseId": "TC-API-014",
+      "operationId": "healthCheck",
+      "endpoint": "/ping",
+      "method": "GET",
+      "category": "error-handling",
+      "title": "Check API service health",
+      "priority": "Low",
+      "preconditions": [],
+      "headers": {},
+      "pathParameters": {},
+      "queryParameters": {},
+      "steps": [
+        "Send GET request to /ping."
+      ],
+      "expectedStatusCode": 201,
+      "expectedResult": "Returns created status.",
+      "sourceReferences": [
+        "paths./ping.get"
+      ]
+    },
+    {
+      "testCaseId": "TC-API-015",
+      "operationId": "deleteBooking",
+      "endpoint": "/booking/{bookingId}",
+      "method": "DELETE",
+      "category": "error-handling",
+      "title": "Delete booking that does not exist",
+      "priority": "Low",
+      "preconditions": [
+        "Valid token cookie exists."
+      ],
+      "headers": {
+        "Cookie": "token=abc123"
+      },
+      "pathParameters": {
+        "bookingId": 9999
+      },
+      "queryParameters": {},
+      "steps": [
+        "Send DELETE request.",
+        "Check error."
+      ],
+      "expectedStatusCode": 404,
+      "expectedResult": "Returns not found message.",
+      "sourceReferences": [
+        "paths./booking/{bookingId}.delete"
+      ]
+    }
+  ]
+}

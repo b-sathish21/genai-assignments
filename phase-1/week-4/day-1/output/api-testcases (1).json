@@ -1,0 +1,386 @@
+{
+  "summary": {
+    "total": 13
+  },
+  "testCases": [
+    {
+      "testCaseId": "TC-API-001",
+      "operationId": "addPet",
+      "endpoint": "/pet",
+      "method": "POST",
+      "category": "positive",
+      "title": "Add a new valid pet",
+      "priority": "High",
+      "preconditions": [
+        "User has valid OAuth token with write:pets scope."
+      ],
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "pathParameters": {},
+      "queryParameters": {},
+      "requestBody": {
+        "name": "doggie",
+        "photoUrls": [
+          "http://example.com/photo.jpg"
+        ]
+      },
+      "steps": [
+        "Send POST request to /pet with valid Pet JSON.",
+        "Verify response status code."
+      ],
+      "expectedStatusCode": 200,
+      "expectedResult": "Pet is created successfully.",
+      "sourceReferences": [
+        "paths./pet.post"
+      ]
+    },
+    {
+      "testCaseId": "TC-API-002",
+      "operationId": "getPetById",
+      "endpoint": "/pet/{petId}",
+      "method": "GET",
+      "category": "positive",
+      "title": "Get pet by valid ID",
+      "priority": "High",
+      "preconditions": [
+        "Pet with ID 1 exists.",
+        "API key header is present."
+      ],
+      "headers": {
+        "api_key": "special-key"
+      },
+      "pathParameters": {
+        "petId": "1"
+      },
+      "queryParameters": {},
+      "requestBody": null,
+      "steps": [
+        "Send GET request to /pet/1.",
+        "Verify pet details match schema."
+      ],
+      "expectedStatusCode": 200,
+      "expectedResult": "Pet details returned successfully.",
+      "sourceReferences": [
+        "paths./pet/{petId}.get"
+      ]
+    },
+    {
+      "testCaseId": "TC-API-003",
+      "operationId": "addPet",
+      "endpoint": "/pet",
+      "method": "POST",
+      "category": "negative",
+      "title": "Add pet with invalid input",
+      "priority": "Medium",
+      "preconditions": [],
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "pathParameters": {},
+      "queryParameters": {},
+      "requestBody": {
+        "name": ""
+      },
+      "steps": [
+        "Send POST request to /pet with invalid data.",
+        "Check for error response."
+      ],
+      "expectedStatusCode": 405,
+      "expectedResult": "Server returns invalid input error.",
+      "sourceReferences": [
+        "paths./pet.post"
+      ]
+    },
+    {
+      "testCaseId": "TC-API-004",
+      "operationId": "deletePet",
+      "endpoint": "/pet/{petId}",
+      "method": "DELETE",
+      "category": "negative",
+      "title": "Delete pet with invalid ID",
+      "priority": "Medium",
+      "preconditions": [
+        "User has valid OAuth token with write:pets scope."
+      ],
+      "headers": {
+        "api_key": "special-key"
+      },
+      "pathParameters": {
+        "petId": "-1"
+      },
+      "queryParameters": {},
+      "requestBody": null,
+      "steps": [
+        "Send DELETE request to /pet/-1.",
+        "Capture response code."
+      ],
+      "expectedStatusCode": 400,
+      "expectedResult": "Server returns invalid ID supplied error.",
+      "sourceReferences": [
+        "paths./pet/{petId}.delete"
+      ]
+    },
+    {
+      "testCaseId": "TC-API-005",
+      "operationId": "getOrderById",
+      "endpoint": "/store/order/{orderId}",
+      "method": "GET",
+      "category": "boundary",
+      "title": "Get order with minimum valid ID",
+      "priority": "High",
+      "preconditions": [
+        "Order 1 exists.",
+        "API key header is present."
+      ],
+      "headers": {
+        "api_key": "special-key"
+      },
+      "pathParameters": {
+        "orderId": "1"
+      },
+      "queryParameters": {},
+      "requestBody": null,
+      "steps": [
+        "Send GET request to /store/order/1.",
+        "Verify response is 200."
+      ],
+      "expectedStatusCode": 200,
+      "expectedResult": "Order with minimum ID retrieved.",
+      "sourceReferences": [
+        "paths./store/order/{orderId}.get"
+      ]
+    },
+    {
+      "testCaseId": "TC-API-006",
+      "operationId": "getOrderById",
+      "endpoint": "/store/order/{orderId}",
+      "method": "GET",
+      "category": "boundary",
+      "title": "Get order with maximum valid ID",
+      "priority": "High",
+      "preconditions": [
+        "Order 10 exists.",
+        "API key header is present."
+      ],
+      "headers": {
+        "api_key": "special-key"
+      },
+      "pathParameters": {
+        "orderId": "10"
+      },
+      "queryParameters": {},
+      "requestBody": null,
+      "steps": [
+        "Send GET request to /store/order/10.",
+        "Verify response is 200."
+      ],
+      "expectedStatusCode": 200,
+      "expectedResult": "Order with maximum ID retrieved.",
+      "sourceReferences": [
+        "paths./store/order/{orderId}.get"
+      ]
+    },
+    {
+      "testCaseId": "TC-API-007",
+      "operationId": "getPetById",
+      "endpoint": "/pet/{petId}",
+      "method": "GET",
+      "category": "authentication",
+      "title": "Get pet without API key",
+      "priority": "Medium",
+      "preconditions": [
+        "Request header lacks api_key."
+      ],
+      "headers": {},
+      "pathParameters": {
+        "petId": "1"
+      },
+      "queryParameters": {},
+      "requestBody": null,
+      "steps": [
+        "Send GET request to /pet/1 without api_key.",
+        "Verify 401 response or similar auth error."
+      ],
+      "expectedStatusCode": 401,
+      "expectedResult": "Request is rejected due to missing auth.",
+      "sourceReferences": [
+        "paths./pet/{petId}.get"
+      ]
+    },
+    {
+      "testCaseId": "TC-API-008",
+      "operationId": "loginUser",
+      "endpoint": "/user/login",
+      "method": "GET",
+      "category": "authentication",
+      "title": "Login with valid credentials",
+      "priority": "High",
+      "preconditions": [
+        "Username and password are correct."
+      ],
+      "headers": {},
+      "pathParameters": {},
+      "queryParameters": {
+        "username": "user1",
+        "password": "password"
+      },
+      "requestBody": null,
+      "steps": [
+        "Send GET request to /user/login with query params.",
+        "Check token headers."
+      ],
+      "expectedStatusCode": 200,
+      "expectedResult": "Login successful with session headers.",
+      "sourceReferences": [
+        "paths./user/login.get"
+      ]
+    },
+    {
+      "testCaseId": "TC-API-009",
+      "operationId": "addPet",
+      "endpoint": "/pet",
+      "method": "POST",
+      "category": "authorization",
+      "title": "Add pet without required scope",
+      "priority": "Medium",
+      "preconditions": [
+        "Token provided lacks write:pets scope."
+      ],
+      "headers": {
+        "Authorization": "Bearer token_without_scope"
+      },
+      "pathParameters": {},
+      "queryParameters": {},
+      "requestBody": {
+        "name": "test",
+        "photoUrls": []
+      },
+      "steps": [
+        "Send POST to /pet with unauthorized token.",
+        "Check for 403."
+      ],
+      "expectedStatusCode": 403,
+      "expectedResult": "Server denies access due to scope.",
+      "sourceReferences": [
+        "paths./pet.post"
+      ]
+    },
+    {
+      "testCaseId": "TC-API-010",
+      "operationId": "deletePet",
+      "endpoint": "/pet/{petId}",
+      "method": "DELETE",
+      "category": "authorization",
+      "title": "Delete pet without required scope",
+      "priority": "Medium",
+      "preconditions": [
+        "Token provided lacks write:pets scope."
+      ],
+      "headers": {
+        "Authorization": "Bearer token_without_scope"
+      },
+      "pathParameters": {
+        "petId": "1"
+      },
+      "queryParameters": {},
+      "requestBody": null,
+      "steps": [
+        "Send DELETE to /pet/1 with unauthorized token.",
+        "Check for 403."
+      ],
+      "expectedStatusCode": 403,
+      "expectedResult": "Server denies access due to scope.",
+      "sourceReferences": [
+        "paths./pet/{petId}.delete"
+      ]
+    },
+    {
+      "testCaseId": "TC-API-011",
+      "operationId": "findPetsByStatus",
+      "endpoint": "/pet/findByStatus",
+      "method": "GET",
+      "category": "validation",
+      "title": "Filter by invalid status value",
+      "priority": "Medium",
+      "preconditions": [
+        "API key header is present."
+      ],
+      "headers": {
+        "api_key": "special-key"
+      },
+      "pathParameters": {},
+      "queryParameters": {
+        "status": "unknown"
+      },
+      "requestBody": null,
+      "steps": [
+        "Send GET request to /pet/findByStatus.",
+        "Verify error response."
+      ],
+      "expectedStatusCode": 400,
+      "expectedResult": "Server returns invalid status value error.",
+      "sourceReferences": [
+        "paths./pet/findByStatus.get"
+      ]
+    },
+    {
+      "testCaseId": "TC-API-012",
+      "operationId": "updatePet",
+      "endpoint": "/pet",
+      "method": "PUT",
+      "category": "validation",
+      "title": "Update pet without required field",
+      "priority": "Medium",
+      "preconditions": [
+        "User has valid OAuth token with write:pets scope."
+      ],
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "pathParameters": {},
+      "queryParameters": {},
+      "requestBody": {
+        "id": 1
+      },
+      "steps": [
+        "Send PUT request to /pet with missing name.",
+        "Check validation error."
+      ],
+      "expectedStatusCode": 405,
+      "expectedResult": "Server rejects missing required field.",
+      "sourceReferences": [
+        "paths./pet.put"
+      ]
+    },
+    {
+      "testCaseId": "TC-API-013",
+      "operationId": "getOrderById",
+      "endpoint": "/store/order/{orderId}",
+      "method": "GET",
+      "category": "error-handling",
+      "title": "Get order that does not exist",
+      "priority": "Low",
+      "preconditions": [
+        "API key header is present."
+      ],
+      "headers": {
+        "api_key": "special-key"
+      },
+      "pathParameters": {
+        "orderId": "99"
+      },
+      "queryParameters": {},
+      "requestBody": null,
+      "steps": [
+        "Send GET request to /store/order/99.",
+        "Verify 404 response."
+      ],
+      "expectedStatusCode": 404,
+      "expectedResult": "Server indicates order not found.",
+      "sourceReferences": [
+        "paths./store/order/{orderId}.get"
+      ]
+    }
+  ]
+}
