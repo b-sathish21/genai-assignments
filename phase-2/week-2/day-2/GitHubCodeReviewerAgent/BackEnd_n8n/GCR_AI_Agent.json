@@ -1,0 +1,214 @@
+{
+  "name": "GCR_AI_Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "={{ $json.body.githubUrl }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        32,
+        -96
+      ],
+      "id": "33d26612-6adb-459c-a59b-4e277ef1b1a6",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.data }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=For this given Input java code :{{ $json.data }} follow these;\n\nInstructions:\n\nYou are an expert Software Code Reviewer specialized in Java enterprise development and test automation frameworks.\nYour task is to analyze and review the uploaded Java code based on specific quality parameters and provide:\n\nIndividual parameter scores (each out of 20)\n\nOverall code quality score (out of 100)\n\nActionable feedback and recommendations for improvement\n\nEvaluate the Java code against the following five parameters:\n\nCode Readability: Are naming conventions, indentation, and structure clear and consistent?\n\nCode Efficiency: Does the code avoid unnecessary loops, redundant logic, and optimize performance?\n\nError Handling: Does the code handle exceptions gracefully with meaningful messages and proper use of try-catch/finally or logging?\n\nMaintainability: Is the code modular, reusable, and easily extendable for future changes?\n\nBest Practices & Standards: Does the code follow Java best practices (SOLID, DRY, proper imports, dependency management, etc.)?\n\nFinally, generate an overall rating with improvement areas and a short summary.\n\nC – Context\n\nThe input Java code belongs to a production-grade software project (could be backend automation, web app, or API service).\nAssume that this code will be part of a shared repository reviewed by multiple developers, so it must comply with clean code, maintainability, and security standards.\nYou are reviewing this code as part of a formal pull request (PR) process.\n\n\nExample Output (Review Summary):\n\nParameter\tDescription\tScore (out of 20)\nCode Readability\tNaming is clear but lacks comments or documentation.\t16\nCode Efficiency\tSimple arithmetic; no inefficiencies observed.\t18\nError Handling\tMissing division-by-zero handling.\t10\nMaintainability\tClass is minimal; not modularized for future extensions.\t14\nBest Practices & Standards\tLacks input validation and unit tests.\t13\n\nOverall Score: 71 / 100\n\nImprovement Areas:\n\nAdd input validation for division-by-zero errors.\n\nInclude JavaDoc comments for public methods.\n\nImplement basic unit tests to validate functionality.\n\nSummary:\nThe code functions correctly but lacks robustness and documentation. Minor improvements can enhance production readiness.\n\nP – Persona\n\nYou are a senior Java architect and code reviewer with 10+ years of experience in enterprise application design, CI/CD integration, and automation frameworks (Spring Boot, Selenium, Playwright, TestNG).\nYou are known for balancing code quality with real-world performance and maintainability."
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        256,
+        -96
+      ],
+      "id": "b958f7d8-6888-41d3-915c-155d2711a9b0",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-120b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        256,
+        96
+      ],
+      "id": "ef84f9ec-d7a7-40a2-bfb4-1e3a21b4ac2f",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "OA2SFBLBbyAC0WQw",
+          "name": "TC_Gen_GROQ_AC"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "GCR",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -400,
+        -96
+      ],
+      "id": "71ce6e3e-c40a-4763-8845-9e6bd4e8939a",
+      "name": "Webhook",
+      "webhookId": "46f1c7ac-51fd-44ad-b293-89c141f728c9"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "=[\n  {\n    \"Total Code files\": 1,\n    \"5 Metrics average score\": {\n      \"Code Readability\": {{ $json['Code Readability'] }},\n      \"Code Efficiency\": {{ $json['Code Efficiency'] }},\n      \"Error Handling\": {{ $json['Error Handling'] }},\n      \"Maintainability\": {{ $json.Maintainability }},\n      \"Best Practices & Standards\": {{ $json['Best Practices & Standards'] }}\n    },\n    \"Overall Score\": {{ $json['Overall Score'] }}\n  }\n]\n",
+        "options": {
+          "responseHeaders": {
+            "entries": []
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        784,
+        -96
+      ],
+      "id": "a5122812-aea8-4813-9fcf-4d33d159c629",
+      "name": "Respond to Webhook1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "439b6ebf-5c25-4399-bf03-a5e83210f0af",
+              "name": "body.githubUrl",
+              "value": "={{ $json.body.githubUrl.replace('https://github.com/', 'https://raw.githubusercontent.com/').replace('/blob/', '/')  }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -176,
+        -96
+      ],
+      "id": "7cfc5313-14ef-4b5e-ab61-1342f850589c",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\nreturn items.map(item => {\n  const text = item.json.text || '';\n\n  const metricNames = [\n    'Code Readability',\n    'Code Efficiency',\n    'Error Handling',\n    'Maintainability',\n    'Best Practices & Standards'\n  ];\n\n  const scores = {};\n\n  // Split the LLM response into individual lines\n  const lines = text.split(/\\r?\\n/);\n\n  for (const metric of metricNames) {\n\n    // Find the table row containing the metric name\n    const row = lines.find(line =>\n      line.trim().startsWith('|') &&\n      line.toLowerCase().includes(metric.toLowerCase())\n    );\n\n    if (!row) {\n      throw new Error('Metric row not found: ' + metric);\n    }\n\n    // Split the row into table columns\n    const cells = row.split('|').map(cell => cell.trim());\n\n    // The last non-empty cell contains the score\n    const scoreCell = cells.filter(cell => cell !== '').pop();\n\n    // Extract the numeric score, including bold Markdown formatting\n    const scoreMatch = scoreCell.match(\n      /\\*{0,2}\\s*(\\d+(?:\\.\\d+)?)\\s*\\*{0,2}/\n    );\n\n    if (!scoreMatch) {\n      throw new Error(\n        'Score not found for: ' + metric +\n        '. Table row: ' + row\n      );\n    }\n\n    scores[metric] = Number(scoreMatch[1]);\n  }\n\n  // Extract the Overall Score, for example: **71 / 100**\n  const overallMatch = text.match(\n    /Overall Score[\\s\\S]{0,150}?\\*\\*\\s*(\\d+(?:\\.\\d+)?)\\s*\\/\\s*100\\s*\\*\\*/i\n  );\n\n  if (!overallMatch) {\n    throw new Error('Overall Score not found in LLM response.');\n  }\n\n  scores['Overall Score'] = Number(overallMatch[1]);\n\n  return {\n    json: scores\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        592,
+        -96
+      ],
+      "id": "8b79fe74-6731-4a65-8037-742842334e04",
+      "name": "Code in JavaScript"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "f0862f1c-fe02-48ec-a7f6-8c3881734f4f",
+  "meta": {
+    "instanceId": "bc4ffae934258d2cc9ead9a2ecd454ee09fc4d3cd3f9c76bb094330b07ecd704"
+  },
+  "nodeGroups": [],
+  "id": "coFCKbWApvb5RDvp",
+  "tags": []
+}
