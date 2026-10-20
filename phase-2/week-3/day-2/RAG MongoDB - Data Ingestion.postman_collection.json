@@ -1,0 +1,288 @@
+{
+  "info": {
+    "_postman_id": "956f8d8d-4146-4d2b-b564-20a3af5b736b",
+    "name": "RAG MongoDB - Data Ingestion",
+    "description": "Complete data ingestion workflow: Upload Excel → Convert to JSON → Create Embeddings → Store in MongoDB",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "48163414",
+    "_collection_link": "https://go.postman.co/collection/48163414-956f8d8d-4146-4d2b-b564-20a3af5b736b?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "1. Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/health",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "health"
+          ]
+        },
+        "description": "Check if the backend server is running and healthy."
+      },
+      "response": []
+    },
+    {
+      "name": "2. Upload Excel - Test Cases",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Save the output file name for next requests",
+              "if (pm.response.code === 200) {",
+              "    var jsonData = pm.response.json();",
+              "    if (jsonData.outputFile) {",
+              "        pm.collectionVariables.set('outputFile', jsonData.outputFile);",
+              "        console.log('Output file saved: ' + jsonData.outputFile);",
+              "    }",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "description": "Excel file containing test cases",
+              "src": "/path/to/your/testcases.xlsx"
+            },
+            {
+              "key": "dataType",
+              "value": "testcases",
+              "type": "text",
+              "description": "Type of data: 'testcases' or 'userstories'"
+            },
+            {
+              "key": "sheetName",
+              "value": "Testcases",
+              "type": "text",
+              "description": "Name of the Excel sheet to convert (optional, defaults to first sheet)"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/upload-excel",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "upload-excel"
+          ]
+        },
+        "description": "Upload an Excel file containing test cases and convert it to JSON format.\n\n**Required:**\n- file: Excel file (.xlsx)\n- dataType: 'testcases'\n\n**Optional:**\n- sheetName: Name of the sheet to convert (defaults to first sheet)\n\n**Expected Columns for Test Cases:**\n- module\n- testCaseId\n- preRequisites\n- title\n- description\n- steps\n- expectedResults\n- automationManual\n- priority\n- createdBy\n- createdDate\n- lastModifiedDate\n- linkedStories\n- risk\n- version\n- type"
+      },
+      "response": []
+    },
+    {
+      "name": "2. Upload Excel - User Stories",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Save the output file name for next requests",
+              "if (pm.response.code === 200) {",
+              "    var jsonData = pm.response.json();",
+              "    if (jsonData.outputFile) {",
+              "        pm.collectionVariables.set('outputFile', jsonData.outputFile);",
+              "        console.log('Output file saved: ' + jsonData.outputFile);",
+              "    }",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "description": "Excel file containing user stories",
+              "src": "/path/to/your/userstories.xlsx"
+            },
+            {
+              "key": "dataType",
+              "value": "userstories",
+              "type": "text",
+              "description": "Type of data: 'testcases' or 'userstories'"
+            },
+            {
+              "key": "sheetName",
+              "value": "stories",
+              "type": "text",
+              "description": "Name of the Excel sheet to convert (optional)"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/upload-excel",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "upload-excel"
+          ]
+        },
+        "description": "Upload an Excel file containing user stories and convert it to JSON format.\n\n**Required:**\n- file: Excel file (.xlsx)\n- dataType: 'userstories'\n\n**Optional:**\n- sheetName: Name of the sheet to convert\n\n**Expected Columns for User Stories:**\n- storyId / Story Key / ID\n- summary / Summary / Title\n- description / Description\n- status / Status\n- priority / Priority\n- assignee / Assignee\n- reporter / Reporter\n- createdDate / Created\n- updatedDate / Updated\n- storyPoints / Story Points\n- components / Components\n- labels / Labels\n- fixVersions / Fix Versions\n- acceptanceCriteria / Acceptance Criteria\n- businessValue / Business Value\n- risk / Risk\n- dependencies / Dependencies\n- notes / Notes\n- Sprint\n- Team"
+      },
+      "response": []
+    },
+    {
+      "name": "3. List Available Files",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/files",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "files"
+          ]
+        },
+        "description": "Get a list of all JSON files available in the data directory.\n\nUse this to see which files are available for creating embeddings."
+      },
+      "response": []
+    },
+    {
+      "name": "4. Create Embeddings - Batch (Test Cases - FAST)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Save the job ID for tracking",
+              "if (pm.response.code === 200) {",
+              "    var jsonData = pm.response.json();",
+              "    if (jsonData.jobId) {",
+              "        pm.collectionVariables.set('jobId', jsonData.jobId);",
+              "        console.log('Job ID saved: ' + jsonData.jobId);",
+              "    }",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"files\": [\n    \"converted-1778218715064.json\"\n  ],\n  \"scriptName\": \"create-embeddings-batch-mistral.js\",\n  \"jobType\": \"testcases\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/create-embeddings-batch",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "create-embeddings-batch"
+          ]
+        },
+        "description": "Create embeddings using batch processing (MUCH FASTER - recommended).\n\n**For Test Cases:**\n```json\n{\n  \"files\": [\"converted-1770988313558.json\"],\n  \"scriptName\": \"create-embeddings-batch-mistral.js\",\n  \"jobType\": \"testcases\"\n}\n```\n\n**Process:**\n1. Launches batch processing script\n2. Processes multiple documents in parallel\n3. Uses Mistral AI batch embeddings API\n4. Much faster than single-file processing\n5. Returns job ID for tracking\n\n**Advantages:**\n- 10-50x faster than single processing\n- Batch API calls reduce costs\n- Parallel processing\n- Better error handling"
+      },
+      "response": []
+    },
+    {
+      "name": "4. Create Embeddings - Batch (User Stories - FAST)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Save the job ID for tracking",
+              "if (pm.response.code === 200) {",
+              "    var jsonData = pm.response.json();",
+              "    if (jsonData.jobId) {",
+              "        pm.collectionVariables.set('jobId', jsonData.jobId);",
+              "        console.log('Job ID saved: ' + jsonData.jobId);",
+              "    }",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"files\": [\n    \"stories-1770988363821.json\"\n  ],\n  \"scriptName\": \"create-userstories-embeddings-batch-mistral.js\",\n  \"jobType\": \"userstories\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/create-embeddings-batch",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "create-embeddings-batch"
+          ]
+        },
+        "description": "Create embeddings for user stories using batch processing (MUCH FASTER).\n\n**For User Stories:**\n```json\n{\n  \"files\": [\"stories-1770988363821.json\"],\n  \"scriptName\": \"create-userstories-embeddings-batch-mistral.js\",\n  \"jobType\": \"userstories\"\n}\n```\n\n**Process:**\n1. Launches user stories batch script\n2. Processes multiple stories in parallel\n3. Uses Mistral AI batch embeddings\n4. Optimized for user story format\n5. Returns job ID for tracking"
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3001"
+    },
+    {
+      "key": "outputFile",
+      "value": ""
+    },
+    {
+      "key": "jobId",
+      "value": ""
+    }
+  ]
+}
